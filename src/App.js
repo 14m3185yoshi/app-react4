@@ -3,11 +3,7 @@ import Rect from './Rect';
 import './App.css';
 
 class App extends Component {
-  data = [
-    "This is list sample",
-    "これはリストのサンプルです",
-    "配列をリストに変換します",
-  ];
+  input = '';
 
   msgStyle = {
     fontSize: "20pt",
@@ -19,66 +15,62 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      list: this.data
+      message: 'type your name:'
     };
+    this.doChange = this.doChange.bind(this);
+    this.doSubmit = this.doSubmit.bind(this);
+  }
+
+  doChange(event) {
+    this.input = event.target.value;
+  }
+  doSubmit(event) {
+    this.setState({
+      message: 'Hello, ' + this.input + '!!'
+    });
+    event.preventDefault();
   }
 
   render() {
     return (
       <div>
         <h1>React</h1>
-        <h2 style={this.msgStyle}>show list.</h2>
-        <List title="サンプル・リスト" data={this.data} />
+        <Message title="Children!!">
+          これはコンポーネント内のコンテンツです。
+          マルでテキストを分割し、リストにして表示します。
+          改行は必要ありません。
+        </Message>
       </div>
-    )
+    );
   }
 }
 
-class List extends Component {
-  number = 1;
-
-  title = {
-    fontSize: "20px",
-    fontWeight: "bold",
-    color: "blue",
-  };
-
-  render() {
-    let data = this.props.data;
-    return (
-      <div>
-        {/* AppでListを呼び出す際にtitle属性を渡しているので、「this.props.title」で呼び出すことができる。 */}
-        <p style={this.title}>{this.props.title}</p>
-        <ul>
-          {/* itemにはdataの格要素が入っている。番号を先頭につけたいので配列を組みなおしている。また繰り返し処理をしたいので。今回はkeyは使っていない。 */}
-          {data.map((item) => <Item number={this.number++} value={item} key={this.number} />)}
-        </ul>
-      </div>
-    )
-  }
-}
-
-class Item extends Component {
+class Message extends Component {
   li = {
-    listStyleType: "square",
     fontSize: "16px",
     color: "#06",
     margin: "0px",
     padding: "0px",
   }
 
-  num = {
-    fontWeight: "bold",
-    color: "red"
-  }
-
   render() {
-    return(
-      <li style={this.li}>
-        <span style={this.num}>[{this.props.number}]</span>
-        {this.props.value}
-      </li>
-    );
+    let content = this.props.children;
+    let arr = content.split('。');
+    let arr2 = [];
+    for(let i = 0; i < arr.length; i++) {
+      if(arr[i].trim() != '') {
+        arr2.push(arr[i]);
+      }
+    }
+    let list = arr2.map((value, key) => (
+      <li style={this.li} key={key}>{value}.</li>
+    ));
+    return (
+      <div>
+        <h2>{this.props.title}</h2>
+        <ol>{list}</ol>
+      </div>
+    )
   }
 }
 
