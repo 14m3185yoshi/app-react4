@@ -14,3 +14,9 @@ p {
   color: #666;
   font-size: 40px;
 }
+input:invalid {
+  border: 2px dashed red;
+}
+input:valid {
+  border: 1px dashed blue;
+}
